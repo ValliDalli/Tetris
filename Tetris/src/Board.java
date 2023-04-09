@@ -36,9 +36,15 @@ public class Board {
     public Square getSquare(int x,int y){
         return this.field[y][x];
     }
-    public void move(int[] oldCords,int[] newCords,Square square){
-        this.field[newCords[1]][newCords[0]]=square;
-        this.field[oldCords[1]][oldCords[0]]=null;
+    public void move(int[][] oldCords,int[][] newCords,Square square){
+        for(int[] cord:oldCords){
+            this.field[cord[1]][cord[0]]=null;
+        }
+        for(int[] cord:newCords){
+            this.field[cord[1]][cord[0]]=square;
+        }
+
+
     }
     public void setSquare(int[] Cords,Square square){
         this.field[Cords[1]][Cords[0]]=square;

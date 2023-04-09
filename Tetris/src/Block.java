@@ -1,8 +1,5 @@
 import java.awt.*;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 
 public class Block {
@@ -15,9 +12,8 @@ public class Block {
     public Board board;
 
 
-    public Block( Character piece, Board board){
+    public Block( Board board){
 
-        this.piece=piece;
 
         this.board=board;
         createPiece();
@@ -30,19 +26,21 @@ public class Block {
 
          int[][][] SHAPES = {
                 {{4, 0},{3, 0},  {5, 0}, {6, 0}}, // I shape
-                {{4,0},{3, 0}, {5, 0}, {5, 1}}, // L shape
-                {{3, 1}, {4, 1}, {5, 1}, {5, 0}}, // J shape
+                {{4,1},{3, 1}, {5, 1}, {5, 0}}, // L shape
+                {{4, 1},{3, 1}, {5, 1}, {3, 0}}, // J shape
                 {{3, 0}, {4, 0}, {4, 1}, {3, 1}}, // O shape
-                {{3, 1}, {4, 1}, {4, 0}, {5, 0}}, // S shape
-                {{3, 0}, {4, 0}, {4, 1}, {5, 1}}, // Z shape
-                {{3, 0}, {4, 0}, {4, 1}, {5, 0}}  // T shape
+                {{4, 1},{3, 1},  {4, 0}, {5, 0}}, // S shape
+                {{4, 1},{3, 0}, {4, 0},  {5, 1}}, // Z shape
+                {{4, 1}, {3, 1},  {4, 0}, {5, 1}}  // T shape
         };
         Random rand = new Random();
         int n = rand.nextInt(7);
         this.shape=SHAPES[n];
+        this.x=this.shape[0][0];
+        this.y=this.shape[0][1];
+
         this.piece=types[n];
-        Square square =new Square(this.piece,true);
-        this.square=square;
+        this.square =new Square(this.piece,true);
         for (int[] cords:this.shape){
             this.board.setSquare(cords,this.square);
 
@@ -62,15 +60,12 @@ public class Block {
             }
             i++;
         }
-        i=0;
+
         this.x+=x;
         this.y+=y;
-        for(int[] coordinate:this.shape){
-            board.move(coordinate,pos[i],this.square);
-            this.shape[i]=pos[i];
+        board.move(this.shape,pos,this.square);
 
-
-        }
+        this.shape=pos;
         return true;
     }
 //    private boolean fallCheck(){//checks if it is possible to fall for one block down
@@ -83,7 +78,7 @@ public class Block {
 //        return true;
 //    }
     public boolean fall(){//makes the block fall for one square down when possible
-        return this.canMove(0, -1);
+        return this.canMove(0, 1);
     }
     public boolean right(){
         return this.canMove(1,0);
@@ -98,15 +93,15 @@ public class Block {
         if(this.piece=='O'){
             return true;
         }
-        int[][] copy=this.shape;
+        int[][] copy = Arrays.stream(this.shape).map(int[]::clone).toArray(int[][]::new);
         for (int[] square:this.shape){
             square[0]-=this.x;
             square[1]-=this.y;
-            int temp=square[0];
-            square[0]=-square[1];
+            int temp=square[0]+this.y;
+            square[0]=-square[1]+this.x;
             square[1]=temp;
         }
-        for(int[] square: this.shape){
+        for(int[] square: this.shape){// check if piece needs to be moved after rotation
             x=square[0];
             y=square[1];
             if(x<0){//if the block is left side out of range we try moving it one square right to adjust
@@ -141,11 +136,14 @@ public class Block {
                     return true;
                 }
                 else{
+                    this.shape=copy;
                     return false;
                 }
             }
 
         }
+        board.move(copy,this.shape,this.square);
+
         return true;
     }
 
