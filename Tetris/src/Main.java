@@ -5,15 +5,19 @@ import javafx.stage.Stage;
 import static javafx.application.Application.launch;
 
 public class Main extends Application {
-    private final int xSize=10;
-    private final int ySize=22;
     public void start(Stage primaryStage) throws Exception {
-        Board board=new Board(xSize,ySize);
+        int xSize = 10;
+        int ySize = 22;
+        Board board=new Board(xSize, ySize);
         Block block=new Block(board);
-        GameWindow gameWindow = new GameWindow(board.getField());
-        primaryStage.setScene(new Scene(gameWindow, xSize*30, ySize*30));
+        GameWindow gameWindow = new GameWindow(board);
+        gameWindow.updateBoard();
+        Scene scene = new Scene(gameWindow, 30*xSize, 30*ySize);
+        primaryStage.setScene(scene);
+
         primaryStage.show();
         block.fall();
+        gameWindow.updateBoard();
 
         primaryStage.show();
 //        block.fall();
