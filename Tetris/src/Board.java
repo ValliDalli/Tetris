@@ -1,6 +1,6 @@
 import java.awt.*;
-import java.util.Dictionary;
-import java.util.Hashtable;
+import java.util.*;
+import java.util.List;
 
 public class Board {
 
@@ -28,6 +28,39 @@ public class Board {
     }
     public int getySize(){
         return ySize;
+    }
+
+    public int removeLine(int[][] cords){
+        Square[] empty_line=new Square[this.xSize];
+        for(int i=0;i<this.xSize;i++){
+            empty_line[i]=null;
+        }
+        List<Integer> list = new ArrayList<Integer>();
+        boolean status;
+
+        for(int[]cord:cords){
+            status=true;
+            if(list.contains(cord[1])){
+                continue;
+            }
+            for (Square square:this.field[cord[1]]){
+                if(square==null){
+                    status=false;
+                }
+            }
+            if(status){
+                list.add(cord[1]);
+            }
+
+        }
+        Collections.sort(list);
+        for(int line:list){
+            for(int i=0; i<line;i++){
+                this.field[i+1]=this.field[i];
+            }
+            this.field[0]=empty_line;
+        }
+        return list.size();
     }
 
     public Square[][] getField(){

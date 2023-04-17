@@ -15,7 +15,7 @@ public class Block {
     public Block( Board board){
 
 
-        this.board=board;
+        this.board =board;
         createPiece();
 
 
@@ -37,12 +37,12 @@ public class Block {
         int n = rand.nextInt(7);
         this.shape=SHAPES[n];
         this.x=this.shape[0][0];
-        this.y=this.shape[0][1];
+        this.y=this.shape[0][1];// x and y is the coordinate around which all blocks rotate
 
         this.piece=types[n];
         this.square =new Square(this.piece,true);
         for (int[] cords:this.shape){
-            this.board.setSquare(cords,this.square);
+            board.setSquare(cords,this.square);
 
         }
 
@@ -52,10 +52,10 @@ public class Block {
         int[][] pos= new int[4][2];
         int i=0;
         for(int[] coordinate:this.shape){
-            Square square=this.board.getSquare(pos[i][0],pos[i][1]);
+            Square square= board.getSquare(pos[i][0],pos[i][1]);
             pos[i][0]=coordinate[0]+x;
             pos[i][1]=coordinate[1]+y;
-            if(pos[i][0]<0||pos[i][0]>=board.getxSize()||pos[i][1]>=this.board.getySize()||!(square==null||square.getIsActive())){
+            if(pos[i][0]<0||pos[i][0]>= board.getxSize()||pos[i][1]>= board.getySize()||!(square==null||square.getIsActive())){
                 return false;
             }
             i++;
@@ -85,6 +85,17 @@ public class Block {
 
 
     }
+    public boolean deactivate(){
+        for(int[] cord:this.shape){
+            if(cord[1]<=1){
+                return false;// if the block is being at the top the player has lost and the game ends
+            }
+            this.board.getField()[cord[1]][cord[0]].deactivateIsActive();
+
+
+        }
+        return true;
+    }
     public boolean left(){
         return this.canMove(-1,0);
 
@@ -113,7 +124,7 @@ public class Block {
                     return false;
                 }
             }
-            else if (x>=board.getxSize()){
+            else if (x>= board.getxSize()){
                 if(this.canMove(-1,0)||this.canMove(-2,0)){
                     return true;
                 }
