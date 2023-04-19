@@ -4,34 +4,20 @@ import javafx.stage.Stage;
 
 import static javafx.application.Application.launch;
 
-public class Main extends Application {
-    public void start(Stage primaryStage) throws Exception {
-        int xSize = 10;
-        int ySize = 22;
-        Board board=new Board(xSize, ySize);
-        Block block=new Block(board);
-        GameWindow gameWindow = new GameWindow(board);
-        gameWindow.updateBoard();
-        Scene scene = new Scene(gameWindow, 30*xSize, 30*ySize);
-        primaryStage.setScene(scene);
-
-        primaryStage.show();
-        block.fall();
-        gameWindow.updateBoard();
-
-        primaryStage.show();
-//        block.fall();
+public class Main {
+//    public void start(Stage primaryStage) throws Exception {
+//        int xSize = 10;
+//        int ySize = 22;
+//        Board board=new Board(xSize, ySize);
+//        Block block=new Block(board);
+//        GameWindow gameWindow = new GameWindow(board);
+//        gameWindow.updateBoard();
+//        Scene scene = new Scene(gameWindow, 30*xSize, 30*ySize);
+//        primaryStage.setScene(scene);
+//
 //        primaryStage.show();
-//        block.right();
-//        block.right();
-//        primaryStage.show();
-//        block.rotate();
-//        primaryStage.show();
-//        block.rotate();
-//        primaryStage.show();
-//        block.rotate();
-//        primaryStage.show();
-    }
+//
+//    }
 
 
     public static void printBoard(Square[][] board){
@@ -53,7 +39,7 @@ public class Main extends Application {
     public static void main(String[] args) {
 
 
-        launch(args);
+
 
 
 
